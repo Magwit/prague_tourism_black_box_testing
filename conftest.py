@@ -6,8 +6,7 @@ from selenium.webdriver import Chrome
 @pytest.fixture
 def browser(scope="module"):
     print("initiating chrome driver")
-    driver = Chrome
+    driver = Chrome()
     driver.implicitly_wait(10)
     yield driver
     print("quitting chrome driver")
-    driver(quit)
