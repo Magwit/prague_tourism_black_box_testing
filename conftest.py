@@ -7,6 +7,6 @@ from selenium.webdriver import Chrome
 def browser(scope="module"):
     print("initiating chrome driver")
     driver = Chrome()
-    driver.implicitly_wait(10)
+    driver.implicitly_wait(5)
     yield driver
     print("quitting chrome driver")
