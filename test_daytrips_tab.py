@@ -28,6 +28,14 @@ def test_daytrips_tab_functionality(browser):
     size = len(browser_tabs)
     assert size == 2
     # assert "Prague" in browser_tabs[1]
-    for x in range(size):
-        browser.switch_to.window(browser_tabs[x])
-        print(browser.title)
+    # for x in range(size):
+
+    #     browser.switch_to.window(browser_tabs[x])
+    #     print(browser.title)
+
+    browser.switch_to.window(browser_tabs[0])
+    print(browser.title)
+    assert "Prague" in browser.title
+    browser.switch_to.window(browser_tabs[1])
+    print(browser.title)
+    assert "DayTrips" in browser.title
