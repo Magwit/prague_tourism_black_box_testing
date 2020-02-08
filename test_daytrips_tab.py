@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 def test_daytrips_tab_functionality(browser):
@@ -16,10 +17,20 @@ def test_daytrips_tab_functionality(browser):
     # WHEN the user clicks on 'Day Trips' in the top menu
 
     wait = WebDriverWait(browser, 20)
-    wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Day Trips")))
-    day_trip_menu_item = browser.find_element(By.LINK_TEXT, "Day Trips")
-    day_trip_menu_item.click()
-    # TODO look into try expect
+    try:
+        wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Day Trips")))
+        day_trip_menu_item = browser.find_element(By.LINK_TEXT, "Day Trips")
+        day_trip_menu_item.click()
+    except TimeoutException:
+        print("A TimeOutException occured")
+    except NoSuchElementException:
+        print("A NoSuchElementException occured")
+
+    # NOTE "If your test is failing from exceptions
+    # then qutimeoutite likely you have no exception handling.
+    # By doing this, you don’t have the opportunity to cleanup the WebDriver object
+    # at the end of the test."
+    # TODO Got to understand exception handling in Selenium
 
     # THEN the user is on a new tab with information on day trips around Prague
 
