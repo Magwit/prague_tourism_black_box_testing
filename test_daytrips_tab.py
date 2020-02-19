@@ -33,7 +33,7 @@ def test_daytrips_tab_functionality(browser):
         print(e.args)
         print("============")
     except Exception:
-        print("THE FALLBACK")
+        print("FALLBACK EXCEPTION")
 
     try:
         # day_trip_menu_item = browser.find_element(By.LINK_TEXT, "Day Trips")
