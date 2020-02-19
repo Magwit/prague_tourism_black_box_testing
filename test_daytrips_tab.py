@@ -6,6 +6,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 def test_daytrips_tab_functionality(browser):
     # GIVEN the user is on The Official Tourist website for Prague
+    # TODO Replace asseerts in GIVEN with Try expect. Asserts here is anipattern
 
     base_url = "https://www.prague.eu/en"
 
@@ -14,36 +15,42 @@ def test_daytrips_tab_functionality(browser):
     assert "Prague" in browser.title
     print(browser.current_url)
 
-    # WHEN the user clicks on 'Day Trips' in the top menu
+    # WHEN the user clicks on 'Day Trips' in the navigation bar
+
+    # xpath to day trip in nav
+    day_trip_nav = "//nav/a[contains(@href, 'trips' )]"
+    # //nav/a[contains(@href, 'trips' )]
 
     wait = WebDriverWait(browser, 20)
     try:
-        wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Day Trips")))
-        day_trip_menu_item = browser.find_element(By.LINK_TEXT, "Day Trips")
+        # wait.until(EC.element_to_be_clickable((By.LINK_TEXT, "Day Trips")))
+        wait.until(EC.element_to_be_clickable((By.XPATH, day_trip_nav)))
+    except TimeoutException as e:
+        print(e)
+        print("------------")
+        print(str(e))
+        print("------------")
+        print(e.args)
+        print("============")
+    except Exception:
+        print("THE FALLBACK")
+
+    try:
+        # day_trip_menu_item = browser.find_element(By.LINK_TEXT, "Day Trips")
+        day_trip_menu_item = browser.find_element(By.XPATH, day_trip_nav)
         day_trip_menu_item.click()
-    except TimeoutException:
-        print("A TimeOutException occured")
-    except NoSuchElementException:
-        print("A NoSuchElementException occured")
-
-    # NOTE "If your test is failing from exceptions
-    # then qutimeoutite likely you have no exception handling.
-    # By doing this, you don’t have the opportunity to cleanup the WebDriver object
-    # at the end of the test."
-    # TODO Got to understand exception handling in Selenium
-
+    except NoSuchElementException as e:
+        print(e)
+        print("------------")
+        print(str(e))
+        print("------------")
+        print(e.args)
+        print("============")
     # THEN the user is on a new tab with information on day trips around Prague
 
-    # https://www.browserstack.com/guide/python-selenium-to-run-web-automation-test
-    # http://allselenium.info/handling-multiple-windows-python-selenium/
     browser_tabs = browser.window_handles
     size = len(browser_tabs)
     assert size == 2
-    # assert "Prague" in browser_tabs[1]
-    # for x in range(size):
-
-    #     browser.switch_to.window(browser_tabs[x])
-    #     print(browser.title)
 
     browser.switch_to.window(browser_tabs[0])
     print(browser.title)
