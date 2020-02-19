@@ -44,7 +44,8 @@ def test_search_bar_functionality(browser):
     search_window.send_keys(search_term)
     search_window.send_keys(Keys.ENTER)
 
-    # THEN the user is on a page displaying the search results related to breweries .....
+    # THEN the user is on a page that displays
+    # the search results related to breweries
 
     query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
     # query_results_url = "https://www.prague.eu/qf/"
@@ -57,7 +58,24 @@ def test_search_bar_functionality(browser):
 
     # Thanks to automation panda...
     # TODO assert length of list > 0
-    listan = "//ul[@id='fulltextListing']"
+    full_text_list_xpath = "//ul[@id='fulltextListing']"
+    try:
+        wait.until(EC.element_to_be_clickable((By.XPATH, full_text_list_xpath)))
+    except Exception:
+        print("FALLBACK EXCEPTION FULL TEXT LIST")
+
+    results_xpath = (
+        f"//ul[@id='fulltextListing']/li//*[contains(text(), '{search_term}')]"
+    )
+    try:
+        results = browser.find_elements(By.XPATH, results_xpath)
+        assert len(results) > 0
+    except Exception:
+        print("FALLBACK EXCEPTION SEARCH RESULTS")
 
     # TODO assert paragraph text contains search term 'Brewery'
-    p_i_listan = "//ul[@id='fulltextListing']/li/p"
+    # p_i_listan = "//ul[@id='fulltextListing']/li/p"
+
+    # bryggeri = "//*[contains(text(), '{search_term}')]"  # return 8 hits
+
+    # panda = "//*[contains(text(), '{PHRASE}')]"
