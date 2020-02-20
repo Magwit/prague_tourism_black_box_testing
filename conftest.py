@@ -1,6 +1,7 @@
 import pytest
 from selenium.webdriver import Chrome
-from selenium.webdriver.support.ui import WebDriverWait
+
+# from selenium.webdriver.support.ui import WebDriverWait
 
 # https://www.guru99.com/pytest-tutorial.html
 # Fixture to initialize and quit for all tests

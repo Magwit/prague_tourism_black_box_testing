@@ -11,13 +11,8 @@ def test_search_bar_functionality(browser):
 
     browser.maximize_window()
     browser.get(base_url)
-    # TODO continue without considering the conftest thing.
-    # Next project there are other goals and one day
-    # that goal will adress the very problem I face now.
-    # hastag GoodEnough
-    pass
 
-    # WHEN the user searches for tk in the search window
+    # WHEN the user searches for 'Brewery' in the search window
 
     search_toggle_xpath = "//div[contains(@class, 'search-toggle')]"
 
@@ -33,11 +28,11 @@ def test_search_bar_functionality(browser):
     except Exception:
         print("FALLBACK EXCEPTION CLICK EVENT")
 
-    # search_window_xpath = "//input[@id='query']"
+    # search_window clickable
     try:
         wait.until(EC.element_to_be_clickable((By.ID, "query")))
     except Exception:
-        print("FALLBACK EXCEPTION QUERY CLICKABLE")
+        print("FALLBACK EXCEPTION SEARCH WINDOW CLICKABLE")
 
     search_window = browser.find_element(By.ID, "query")
     search_term = "Brewery"
@@ -48,34 +43,25 @@ def test_search_bar_functionality(browser):
     # the search results related to breweries
 
     query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
-    # query_results_url = "https://www.prague.eu/qf/"
+    # Assert correct url
     try:
         assert browser.current_url == query_results_url
     except Exception:
         print("FALLBACK EXCEPTION QUERY RESULTS PAGE")
 
-    # ul id= 'fulltextlisting'li p h3
-
-    # Thanks to automation panda...
-    # TODO assert length of list > 0
     full_text_list_xpath = "//ul[@id='fulltextListing']"
     try:
-        wait.until(EC.element_to_be_clickable((By.XPATH, full_text_list_xpath)))
+        wait.until(EC.visibility_of_element_located((By.XPATH, full_text_list_xpath)))
     except Exception:
         print("FALLBACK EXCEPTION FULL TEXT LIST")
 
     results_xpath = (
         f"//ul[@id='fulltextListing']/li//*[contains(text(), '{search_term}')]"
     )
+    # Assert both that a results list exists
+    # and that the search term is found in the result list
     try:
         results = browser.find_elements(By.XPATH, results_xpath)
         assert len(results) > 0
     except Exception:
         print("FALLBACK EXCEPTION SEARCH RESULTS")
-
-    # TODO assert paragraph text contains search term 'Brewery'
-    # p_i_listan = "//ul[@id='fulltextListing']/li/p"
-
-    # bryggeri = "//*[contains(text(), '{search_term}')]"  # return 8 hits
-
-    # panda = "//*[contains(text(), '{PHRASE}')]"
