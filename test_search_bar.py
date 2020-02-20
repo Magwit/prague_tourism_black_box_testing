@@ -90,3 +90,8 @@ def test_search_bar_functionality(browser):
     except AssertionError as e:
         print(e)
         raise e
+
+    # TODO read https://github.com/pytest-dev/pytest/issues/2508
+    # Quote from Niccodemus June 21, 2017  "By using yield, if an exception happens
+    # there's no way for pytest to handle the error and resume the generator,
+    # because the function never even yielded in the first place."
