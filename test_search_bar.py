@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 
 def test_search_bar_functionality(browser):
@@ -19,41 +20,64 @@ def test_search_bar_functionality(browser):
     wait = WebDriverWait(browser, 20)
     try:
         wait.until(EC.element_to_be_clickable((By.XPATH, search_toggle_xpath)))
-    except Exception:
-        print("FALLBACK EXCEPTION CLICKABLE")
+    except TimeoutException as e:
+        print(e)
+        raise (e)
+    except Exception as e:
+        print(e)
+        raise e
 
     try:
         search_toggle = browser.find_element(By.XPATH, search_toggle_xpath)
         search_toggle.click()
-    except Exception:
-        print("FALLBACK EXCEPTION CLICK EVENT")
+    except NoSuchElementException as e:
+        print(e)
+        raise e
+    except Exception as e:
+        print(e)
+        raise e
 
     # search_window clickable
     try:
         wait.until(EC.element_to_be_clickable((By.ID, "query")))
-    except Exception:
-        print("FALLBACK EXCEPTION SEARCH WINDOW CLICKABLE")
+    except TimeoutException as e:
+        print(e)
+        raise e
+    except Exception as e:
+        print(e)
+        raise e
 
     search_window = browser.find_element(By.ID, "query")
-    search_term = "Brewery"
+    # search_term = "Brewery"
+    search_term = "Ftrhruddh"
     search_window.send_keys(search_term)
     search_window.send_keys(Keys.ENTER)
 
     # THEN the user is on a page that displays
     # the search results related to breweries
 
-    query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
+    # query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
+    query_results_url = "https://www.vice.com/en_us/section/tech"
     # Assert correct url
+    # assert browser.current_url == query_results_url
     try:
         assert browser.current_url == query_results_url
-    except Exception:
-        print("FALLBACK EXCEPTION QUERY RESULTS PAGE")
+    except AssertionError as e:
+        print(e)
+        raise e
+    except Exception as e:
+        print(e)
+        raise e
 
     full_text_list_xpath = "//ul[@id='fulltextListing']"
     try:
         wait.until(EC.visibility_of_element_located((By.XPATH, full_text_list_xpath)))
-    except Exception:
-        print("FALLBACK EXCEPTION FULL TEXT LIST")
+    except TimeoutException as e:
+        print(e)
+        raise e
+    except Exception as e:
+        print(e)
+        raise e
 
     results_xpath = (
         f"//ul[@id='fulltextListing']/li//*[contains(text(), '{search_term}')]"
@@ -63,5 +87,6 @@ def test_search_bar_functionality(browser):
     try:
         results = browser.find_elements(By.XPATH, results_xpath)
         assert len(results) > 0
-    except Exception:
-        print("FALLBACK EXCEPTION SEARCH RESULTS")
+    except AssertionError as e:
+        print(e)
+        raise e
