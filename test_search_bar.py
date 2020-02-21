@@ -48,18 +48,17 @@ def test_search_bar_functionality(browser):
         raise e
 
     search_window = browser.find_element(By.ID, "query")
-    # search_term = "Brewery"
-    search_term = "Ftrhruddh"
+    search_term = "Brewery"
     search_window.send_keys(search_term)
     search_window.send_keys(Keys.ENTER)
 
     # THEN the user is on a page that displays
     # the search results related to breweries
 
-    # query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
-    query_results_url = "https://www.vice.com/en_us/section/tech"
+    query_results_url = "https://www.prague.eu/qf/en/ramjet/fulltextSearch"
+
     # Assert correct url
-    # assert browser.current_url == query_results_url
+
     try:
         assert browser.current_url == query_results_url
     except AssertionError as e:
@@ -69,6 +68,7 @@ def test_search_bar_functionality(browser):
         print(e)
         raise e
 
+    # Assert that the list for results is visible
     full_text_list_xpath = "//ul[@id='fulltextListing']"
     try:
         wait.until(EC.visibility_of_element_located((By.XPATH, full_text_list_xpath)))
@@ -90,8 +90,3 @@ def test_search_bar_functionality(browser):
     except AssertionError as e:
         print(e)
         raise e
-
-    # TODO read https://github.com/pytest-dev/pytest/issues/2508
-    # Quote from Niccodemus June 21, 2017  "By using yield, if an exception happens
-    # there's no way for pytest to handle the error and resume the generator,
-    # because the function never even yielded in the first place."
